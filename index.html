@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kerala Plant Disease Detector</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <center>
+        <h2>Upload Leaf Photo</h2>
+        <input type="file" id="file" accept="image/*" capture="camera"><br><br>
+        <img id="preview" width="300" style="display:none;"><br><br>
+
+        <div id="result" style="font-size:18px; max-width:90%;"></div>
+    </center>
+
+<script>
+document.getElementById('file').addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+
+    // Show preview
+    document.getElementById('preview').src = URL.createObjectURL(file);
+    document.getElementById('preview').style.display = 'block';
+    document.getElementById('result').innerHTML = "Analyzing...";
+
+    const fd = new FormData();
+    fd.append("image", file);
+
+    fetch("http://10.179.224.208:5000/predict", {   // ← CHANGE TO YOUR PC IP
+        method: "POST",
+        body: fd
+    })
+    .then(r => r.json())
+    .then(d => {
+        document.getElementById('result').innerHTML = `
+            <br><b style="color:green; font-size:22px;">${d.disease}</b>
+            <br><br>Confidence: <b>${d.confidence}</b>
+            <br><br><b>Remedy:</b><br>${d.remedy.replace(/ • /g, '<br>')}
+        `;
+    })
+    .catch(() => {
+        document.getElementById('result').innerHTML = "<span style='color:red;'>Error – make sure backend is running</span>";
+    });
+});
+</script>
+</body>
+</html>

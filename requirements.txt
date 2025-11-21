@@ -1,0 +1,7 @@
+# requirements.txt  ← save this in your project folder
+Flask==2.3.3
+torch==2.1.2
+torchvision==0.16.2
+transformers==4.36.2
+Pillow==10.2.0
+safetensors==0.4.2
