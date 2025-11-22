@@ -27,7 +27,7 @@ def predict():
     disease = model.config.id2label[idx.item()]
     
     return jsonify({
-        "crop": disease.split("___")[0],
+        "crop": disease.split("___ ")[0],
         "disease": disease.replace("___", " - "),
         "confidence": f"{confidence.item():.1%}"
     })
